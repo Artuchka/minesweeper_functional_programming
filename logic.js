@@ -1,3 +1,5 @@
+// in logic.js we make detailed(not high-level abstract) logic of the game
+
 const TILE_STATUS = {
 	HIDDEN: "hidden",
 	OPENED: "opened",
@@ -16,6 +18,7 @@ export function createBoard(boardSize, minesLeft) {
 	return board
 }
 
+// should be called smth like "openAdjacentTiles"
 export function openTile(board, position, boardSize) {
 	if (
 		isOpened(board, position) ||
@@ -26,7 +29,7 @@ export function openTile(board, position, boardSize) {
 	}
 	let newBoard = openCertainTile(board, position, TILE_STATUS.OPENED, boardSize)
 
-	// setting position offsets by hand so it's less calculations + checked that they are only christ-alike
+	// setting position offsets by hand so there are less calculations AND checked that they are only christ-alike
 	const dxdyPositions = [
 		{ dx: -1, dy: 0 },
 		{ dx: 1, dy: 0 },
@@ -56,6 +59,7 @@ function openCertainTile(board, position, status, boardSize) {
 	newTileElement.dataset.status = status
 
 	const minesAroundCount = countMinesAround(board, position, boardSize)
+	// no need to show zero amount of mines around =)
 	if (minesAroundCount >= 1) {
 		newTileElement.textContent = minesAroundCount
 	}
@@ -71,6 +75,7 @@ function openCertainTile(board, position, status, boardSize) {
 }
 
 export function countMinesAround(board, position, boardSize) {
+	// it may seem stupid, but it's by hand only because of FP(btw not Fucked Up) style!!!
 	const dxdyPositions = [
 		{ dx: -1, dy: -1 },
 		{ dx: -1, dy: 0 },
@@ -85,17 +90,16 @@ export function countMinesAround(board, position, boardSize) {
 		{ dx: 1, dy: 1 },
 	]
 
-	const res = dxdyPositions.reduce((count, offset) => {
+	return dxdyPositions.reduce((count, offset) => {
 		const newPos = { x: position.x + offset.dx, y: position.y + offset.dy }
 		if (positionPossible(newPos, boardSize) && isMine(board, newPos)) {
 			return count + 1
 		}
 		return count
 	}, 0)
-	console.log(res)
-	return res
 }
 
+// checks whether position lies down on our map or is abroad
 function positionPossible(position, boardSize) {
 	return (
 		0 <= position.x &&
@@ -207,7 +211,9 @@ function createMines(board, boardSize, minesLeft) {
 	let minesPositions = []
 	let newBoard = board
 
+	// haven't figured out the normal(not physco) way to do it in FP style (without loop i mean)
 	while (minesLeft > minesPositions.length) {
+		// minus 1 because array `board` indexes start from 0 =)
 		const x = randomNumber(boardSize - 1)
 		const y = randomNumber(boardSize - 1)
 
@@ -220,9 +226,7 @@ function createMines(board, boardSize, minesLeft) {
 		}
 	}
 
-	console.log("new positions")
 	minesPositions.forEach((pos) => {
-		console.log(pos)
 		const newTile = {
 			...newBoard[pos.y][pos.x],
 			adjacentMinesCount: MINE_FLAG,
@@ -249,6 +253,7 @@ function addElement(array, element) {
 }
 
 function randomNumber(top) {
+	// +0.9 is `bicycle` so we definetely get possible range [0..top(included)]
 	return Math.floor(Math.random() * (top + 0.9))
 }
 

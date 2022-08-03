@@ -1,3 +1,5 @@
+// in script.js we work with UI (rendering, setting event listeners, abstract logic of the game, etc...)
+
 import {
 	createBoard,
 	markTile,
@@ -18,8 +20,8 @@ const inputMinesLeftElement = document.querySelector("#minesLeftInput")
 const inputTileSizeElement = document.querySelector("#tileSizeInput")
 const inputBoardSizeElement = document.querySelector("#boardSizeInput")
 
+// uploading saved settings
 const savedSettings = getSavedSettings()
-console.log(savedSettings)
 let tileSize = savedSettings.tileSize
 let boardSize = parseFloat(savedSettings.boardSize)
 let minesLeft = parseFloat(savedSettings.minesLeft)
@@ -30,14 +32,13 @@ inputMinesLeftElement.value = minesLeft
 
 let board = createBoard(boardSize, minesLeft)
 
-console.log("board is ready!")
-console.log(board)
-
 setCSSProperties(boardSize, tileSize)
 setMinesLeftTitle(minesLeft)
 
 render()
 
+// moved event listeners out as individual functions
+// to be able to remove event listener later
 const onchangeMinesLeftEventListener = (e) => {
 	minesLeft =
 		Math.min(parseFloat(inputMinesLeftElement.value), boardSize ** 2 - 1) ?? 3
@@ -51,7 +52,6 @@ const onchangeMinesLeftEventListener = (e) => {
 const onchangeTileSizeEventListener = (e) => {
 	tileSize = inputTileSizeElement.value.toString() + "px"
 	setCSSProperties(boardSize, tileSize)
-	console.log(minesLeft, boardSize, tileSize)
 	updateSavedSettings(minesLeft, boardSize, tileSize)
 
 	render()
@@ -67,6 +67,7 @@ const onchangeBoardSizeEventListener = (e) => {
 	render()
 }
 
+// adding event listeners to inputs
 inputMinesLeftElement.addEventListener(
 	"change",
 	onchangeMinesLeftEventListener,
@@ -83,7 +84,10 @@ inputBoardSizeElement.addEventListener(
 	false
 )
 
+// moved event listeners out as individual functions
+// to be able to remove event listener later
 const clickEventListener = (e) => {
+	// check if clicked on tile (only tile has `data-status` attribute)
 	if (!e.target.matches("[data-status]")) return
 
 	const x = parseFloat(e.target.dataset.x)
@@ -103,6 +107,7 @@ const clickEventListener = (e) => {
 		if (isWin(board)) {
 			showModalWin()
 			turnOffBoard()
+			return
 		}
 	}
 }
@@ -123,10 +128,12 @@ const contextmenuEventListener = (e) => {
 	render()
 }
 
+// adding event listeners to boardElement
 boardElement.addEventListener("click", clickEventListener, false)
 boardElement.addEventListener("contextmenu", contextmenuEventListener, false)
 render()
 
+// updates the board state with actual one
 function render() {
 	boardElement.textContent = ""
 	board.forEach((row) => {
@@ -136,6 +143,7 @@ function render() {
 	})
 }
 
+// setting boardSize and tileSize for CSS file
 function setCSSProperties(boardSize, tileSize) {
 	document.documentElement.style.setProperty("--tileSize", tileSize.toString())
 	document.documentElement.style.setProperty(
@@ -150,7 +158,6 @@ function setMinesLeftTitle(minesLeft) {
 
 function isWin(board) {
 	const openedTiles = countOpenedTiles(board)
-	console.log(openedTiles)
 	return openedTiles === boardSize ** 2 - minesLeft
 }
 
@@ -172,17 +179,17 @@ function turnOffBoard() {
 	)
 
 	inputMinesLeftElement.removeEventListener(
-		"onchange",
+		"change",
 		onchangeMinesLeftEventListener,
 		false
 	)
 	inputTileSizeElement.removeEventListener(
-		"onchange",
+		"change",
 		onchangeTileSizeEventListener,
 		false
 	)
 	inputBoardSizeElement.removeEventListener(
-		"onchange",
+		"change",
 		onchangeBoardSizeEventListener,
 		false
 	)
@@ -192,7 +199,6 @@ function updateSavedSettings(minesLeft, boardSize, tileSize) {
 	localStorage.setItem("tileSize", tileSize.toString())
 	localStorage.setItem("boardSize", boardSize.toString())
 	localStorage.setItem("minesLeft", minesLeft.toString())
-	console.log("updating!")
 }
 
 function getSavedSettings() {
