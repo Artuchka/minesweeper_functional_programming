@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>minesweeper</title>
+
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <h1 class="title">Minsweeper</h1>
+    <h3 class="mines-left" id="minesLeft">Mines left: <span>10</span></div>
+
+    <form action="" id="gameSettings">
+        <label for="minesLeft">Mines</label>
+        <input type="number" id="minesLeftInput" name="minesLeft" min="1" max="24" value="3">
+
+        <label for="boardSize">Board Size</label>
+        <input type="number" id="boardSizeInput" name="boardSize" min="3" max="25" value="6">
+
+        <label for="tileSize">Tile Size</label>
+        <input type="range" id="tileSizeInput" name="tileSize" min="10" max="100" value="60" step="5">
+    </form>
+
+    <div class="board" id="board">
+        <div class="tile" data-status="hidden">1</div>
+        <div class="tile" data-status="opened">0</div>
+        <div class="tile" data-status="marked">4</div>
+        <div class="tile" data-status="mine">3</div>
+    </div>
+
+    <div class="modal-endgame" id="modalEndgame">
+        YOU HAVE WON!!!
+    </div>
+</body>
+</html>

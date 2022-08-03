@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: serif;
+    /* disabled hand setting so that js can set the props */
+    /* --tileSize: 30px;
+    --boardSize: 10; */
+    --inputWidth: 100px;
+    --inputHeight: 60px;
+    --inputBorderColor: rgb(25, 126, 250);
+    --hiddenColor: rgb(208, 208, 203);
+    --openedColor: rgb(110, 255, 66);
+    --markedColor: yellow;
+    --mineColor: rgb(255, 59, 59);
+    box-sizing: border-box;
+
+    font-family: 'Mouse Memoirs', sans-serif;
+    word-spacing: 0.5em;
+    letter-spacing: 0.3em;
+}
+
+body {
+    display: grid;
+    place-content: center;
+    background: rgb(175,54,87);
+background: linear-gradient(90deg, rgba(175,54,87,1) 0%, rgba(221,235,238,1) 100%);
+    width: 100vw;
+}
+
+
+.board {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    display: grid;
+    grid-template-columns: repeat(var(--boardSize), var(--tileSize));
+    grid-template-rows: repeat(var(--boardSize), var(--tileSize));
+}
+
+.tile {
+    /* color: transparent; */
+    line-height: var(--tileSize);
+    text-align: center;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+.tile[data-status='hidden'] {
+    background-color: var(--hiddenColor);
+}
+
+.tile[data-status='opened'] {
+    background-color: var(--openedColor);
+    color: black;
+}
+
+.tile[data-status='marked'] {
+    background-color: var(--markedColor);
+}
+
+.tile[data-status='mine'] {
+    background-color: var(--mineColor);
+    color: black;
+}
+
+.title, .mines-left {
+    text-align: center;   
+}
+.modal-endgame {
+    display: none;
+    background-color: #fff;
+    width: 400px;
+    height: 200px;
+    text-align: center;
+    line-height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.modal-endgame.show {
+    display: block;
+}
+
+#gameSettings {
+    margin: 2em 0;
+    display: grid;
+    grid-template-columns: repeat(2, 300px);
+    gap: 2em;
+    text-align: left;
+}
+
+#gameSettings label {
+    font-size: 2em;
+}
+
+#minesLeftInput, 
+#boardSizeInput {
+    width: var(--inputWidth);
+    height: var(--inputHeight);
+    line-height: var(--inputHeight);
+    font-size: calc(var(--inputHeight)*0.7);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    text-align: center;
+    text-indent: 0.5em;
+}
+
+#minesLeftInput:focus,
+#boardSizeInput:focus {
+    outline: 2px solid var(--inputBorderColor);
+}
+
+#tileSizeInput {
+    width: 300px;
+}
